@@ -57,21 +57,19 @@ object SparkLog4jExample {
       private lazy val setMdcAppId = Try(MDC.put("application_id", applicationId))
         .getOrElse(log.warn(s"Error setting application id"))
     }
-
-    testRdd.foreach { num =>
-      LoggingConfiguration.init // initialized once on first record, value is thrown away an nothing done for other records
-      if (num % 100 == 0) {
-        log.warn(s"XXXXX warning! num: " + num)
-      } else {
-        log.info(s"XXXXX found: " + num)
+      testRdd.foreach { num =>
+        LoggingConfiguration.init // initialized once on first record, value is thrown away an nothing done for other records
+        if (num % 1000 == 0) {
+          log.error(s"XXXXX error! num: " + num)
+        } else if (num % 100 == 0) {
+          log.warn(s"XXXXX warning! num: " + num)
+        } else {
+          log.info(s"XXXXX found: " + num)
+        }
       }
-      if (num % 500 == 0) {
-        log.error(s"XXXXX error! num: " + num)
-      }
-    }
 
-    log.info("Shutting down the spark logging example")
-    sc.stop()
+      log.info("Shutting down the spark logging example")
+      sc.stop()
   }
 
 }
