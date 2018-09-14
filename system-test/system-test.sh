@@ -13,6 +13,7 @@ function cleanup {
 
 trap cleanup EXIT
 mkdir -p /tmp/pulse-system-test
+mkdir -p system-test/log_files
 
 # Writing logs to local directory
 export collection_roller_log="system-test/log_files/collection_roller.log"
@@ -48,9 +49,7 @@ numfound=$(echo $query_response | grep "numFound" |awk -F  "," '/1/ {print $8}'|
 echo $http_status_collection
 
 # Checking if the collection exists and if documents are collected
-
 if [[ "$http_status_collection" == 200 ]]; then
-
        if [[ "$numfound" == 0 ]]; then
                 echo "Records assertion in Solr collection Failed!"
                 exit 1
